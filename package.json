@@ -1,0 +1,12 @@
+{
+  "name": "employees-records",
+  "version": "",
+  "description": "",
+  "scripts": {
+    "test": "echo \"No tests yet...\""
+  },
+  "author": "",
+  "dependencies": {
+    "joi": "^17.4.2"
+  }
+}
