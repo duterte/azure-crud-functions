@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const yup = require('yup');
 const Department = require('../database/models/department');
 const Employees = require('../database/models/employees');
 
@@ -7,12 +7,12 @@ module.exports = async function (context, req) {
   let status = 200;
   let body = '';
 
-  const schema = Joi.object({
-    id: Joi.number().required(),
+  const schema = yup.object().shape({
+    id: yup.number().required(),
   });
-  const joi = schema.validate({ id: Number(id) });
+  const validation = schema.validate({ id: Number(id) });
 
-  if (joi && joi.error) {
+  if (validation && validation.error) {
     status = 400;
     body = joi.error.message;
   } else {

@@ -1,23 +1,21 @@
-const Joi = require('joi');
-let DATABASE = require('../data');
+const yup = require('yup');
 const Department = require('../database/models/department');
 const Employees = require('../database/models/employees');
-const select = require('../database/queries/select');
 
 module.exports = async function (context, req) {
   const { id } = req.params;
   let status = 200;
   let body = '';
 
-  const schema = Joi.object({
-    id: Joi.number().required(),
+  const schema = yup.object().shape({
+    id: yup.number().required(),
   });
 
-  const joi = schema.validate({ id: Number(id) });
+  const validation = schema.isValid({ id: Number(id) });
 
-  if (joi && joi.error) {
+  if (validation && validation.error) {
     status = 400;
-    body = joi.error.message;
+    body = validation.error.message;
   } else {
     const counter = await Employees.findAll({
       where: {

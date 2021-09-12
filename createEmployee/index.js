@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const yup = require('yup');
 const Department = require('../database/models/department');
 const Employees = require('../database/models/employees');
 const insert = require('../database/queries/insert');
@@ -9,16 +9,18 @@ module.exports = async function (context, req) {
     let status = 200;
     let body = '';
 
-    const schema = Joi.object({
-      name: Joi.string().required(),
-      jobTitle: Joi.string().required(),
-      department: Joi.string().required(),
-      location: Joi.string().required(),
+    const schema = yup.object().shape({
+      name: yup.string().required(),
+      jobTitle: yup.string().required(),
+      department: yup.string().required(),
+      location: yup.string().required(),
     });
 
-    const joi = schema.validate(data);
+    const validation = await schema.isValid(data);
 
-    if (joi && joi.error) {
+    console.log(validation);
+
+    if (validation && validation.error) {
       status = 400;
       body = joi.error.message;
     } else {
