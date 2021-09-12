@@ -1,5 +1,8 @@
 const Joi = require('joi');
 let DATABASE = require('../data');
+const Department = require('../database/models/department');
+const Employees = require('../database/models/employees');
+const select = require('../database/queries/select');
 
 module.exports = async function (context, req) {
   const { id } = req.params;
@@ -16,14 +19,26 @@ module.exports = async function (context, req) {
     status = 400;
     body = joi.error.message;
   } else {
-    const index = DATABASE.findIndex((i) => i.employeeNumber === Number(id));
-
-    if (index === -1) {
+    const counter = await Employees.findAll({
+      where: {
+        employeeNumber: Number(id),
+      },
+      limit: 1,
+    });
+    if (counter && counter.length) {
+      Department.destroy({
+        where: {
+          employeeNumber: Number(id),
+        },
+      });
+      Employees.destroy({
+        where: {
+          employeeNumber: Number(id),
+        },
+      });
+    } else {
       status = 404;
       body = 'resource not found';
-    } else {
-      DATABASE = DATABASE.filter((i) => i.employeeNumber !== Number(id));
-      body = 'deleted successfully';
     }
   }
 

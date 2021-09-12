@@ -1,5 +1,6 @@
 const Joi = require('joi');
-const DATABASE = require('../data');
+const Department = require('../database/models/department');
+const Employees = require('../database/models/employees');
 
 module.exports = async function (context, req) {
   const { id } = req.params;
@@ -15,13 +16,14 @@ module.exports = async function (context, req) {
     status = 400;
     body = joi.error.message;
   } else {
-    const employee = DATABASE.find((i) => i.employeeNumber === Number(id));
-    if (!employee) {
-      status = 404;
-      body = 'resource not found';
-    } else {
-      body = employee;
-    }
+    const employee = await Employees.findAll({
+      where: {
+        employeeNumber: id,
+      },
+      include: Department,
+      limit: 1,
+    });
+    body = employee;
   }
 
   context.res = {
