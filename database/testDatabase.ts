@@ -1,6 +1,6 @@
-const sequelize = require('./index');
+import sequelize from './index';
 
-async function testDatabase() {
+async function testDatabase(): Promise<void> {
   try {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');

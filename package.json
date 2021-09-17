@@ -3,16 +3,29 @@
   "version": "",
   "description": "",
   "scripts": {
+    "build": "tsc",
+    "build:production": "npm run prestart && npm prune --production",
+    "watch": "tsc --w",
+    "prestart": "npm run build && func extensions install",
+    "start:host": "func start",
+    "start": "npm-run-all --parallel start:host watch",
     "test": "echo \"No tests yet...\""
   },
   "author": "",
   "dependencies": {
     "dotenv": "^10.0.0",
-    "joi": "^17.4.2",
     "mysql2": "^2.3.0",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.6.5",
-    "tedious": "^12.2.0"
+    "tedious": "^12.2.0",
+    "yup": "^0.32.9"
+  },
+  "devDependencies": {
+    "@azure/functions": "^1.2.3",
+    "@types/node": "^16.9.2",
+    "@types/validator": "^13.6.3",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^4.4.3"
   }
 }
