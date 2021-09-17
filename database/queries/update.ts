@@ -1,5 +1,5 @@
 import { ModelCtor } from 'sequelize/types';
-import { UserInfo } from '../data';
+import { UserInfo } from '../../createEmployee';
 
 export default async (
   Model: ModelCtor<any>,

@@ -3,7 +3,14 @@ import { SchemaOf, object, string } from 'yup';
 import Department from '../database/models/department';
 import Employee from '../database/models/employee';
 import insert from '../database/queries/insert';
-import { UserInfo } from '../database/data';
+
+export interface UserInfo {
+  employeeNumber?: number;
+  name: string;
+  jobTitle?: string;
+  department?: string;
+  location?: string;
+}
 
 type ReqbodySchema = {
   name: string;

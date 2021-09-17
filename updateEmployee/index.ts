@@ -4,7 +4,6 @@ import Department from '../database/models/department';
 import update from '../database/queries/update';
 import Employee from '../database/models/employee';
 import insert from '../database/queries/insert';
-import select from '../database/queries/select';
 
 type ReqbodySchema = {
   employeeNumber: number;
