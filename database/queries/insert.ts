@@ -1,10 +1,10 @@
 import { ModelCtor } from 'sequelize/types';
-import { UserInfo } from '../../createEmployee';
+import { QueryObj } from '../../createEmployee';
 const INCREMENT = 'employeeNumber';
 
 export default async (
   Model: ModelCtor<any>,
-  data: UserInfo,
+  data: QueryObj,
   option?: any
 ): Promise<any> => {
   if (option && option.increment) {

@@ -7,10 +7,11 @@ const httpTrigger: AzureFunction = async (
   context: Context,
   req: HttpRequest
 ) => {
+  let status: number = 200;
+  let body: string | object = '';
+
   try {
     const { id } = req.params;
-    let status: number = 200;
-    let body: any = '';
     const schema: SchemaOf<number> = number().defined();
     await schema.validate(Number(id));
 
@@ -22,25 +23,19 @@ const httpTrigger: AzureFunction = async (
       limit: 1,
     });
     body = employee;
-
-    context.res = {
-      status: status,
-      body: body,
-    };
   } catch (err: any) {
-    let status = 500;
-    let body = 'something went wrong';
-    console.log('error');
-    console.log(err.name);
     if (err.name === 'ValidationError') {
       status = 400;
       body = err.message;
+    } else {
+      status = 500;
+      body = 'something went wrong';
     }
-    context.res = {
-      status: status,
-      body: body,
-    };
   }
+  context.res = {
+    status: status,
+    body: body,
+  };
 };
 
 export default httpTrigger;

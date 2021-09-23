@@ -10,14 +10,15 @@ enum Dialect {
   'mssql' = 'mssql',
 }
 
+const DB_DIALECT = process.env.DB as Dialect;
 const DB_HOST = process.env.DB_HOST as string;
-const DB_NAME = process.env.DB_NAME as string;
+const DB_UNAME = process.env.DB_NAME as string;
 const DB_USER = process.env.DB_USER as string;
 const DB_PWD = process.env.DB_PWD as string;
 
-const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PWD, {
+const sequelize = new Sequelize(DB_UNAME, DB_USER, DB_PWD, {
   host: DB_HOST,
-  dialect: Dialect.mysql,
+  dialect: DB_DIALECT || Dialect.postgres,
 });
 
 export default sequelize;

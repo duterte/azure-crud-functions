@@ -1,9 +1,9 @@
 import { ModelCtor } from 'sequelize/types';
-import { UserInfo } from '../../createEmployee';
+import { QueryObj } from '../../createEmployee';
 
 export default async (
   Model: ModelCtor<any>,
-  data: UserInfo,
+  data: QueryObj,
   option?: any
 ): Promise<any> => {
   await Model.update(data, option);

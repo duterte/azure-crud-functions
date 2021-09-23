@@ -43,4 +43,6 @@ __pycache__/
 *$py.class
 
 
-*.lock*
+yarn.lock
+package-lock.json
+/test/

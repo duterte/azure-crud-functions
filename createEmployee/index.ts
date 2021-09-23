@@ -4,30 +4,41 @@ import Department from '../database/models/department';
 import Employee from '../database/models/employee';
 import insert from '../database/queries/insert';
 
-export interface UserInfo {
+export interface QueryObj {
   employeeNumber?: number;
-  name: string;
+  name?: string;
   jobTitle?: string;
   department?: string;
   location?: string;
 }
 
-type ReqbodySchema = {
+export interface CreatebodySchema {
   name: string;
   jobTitle: string;
   department: string;
   location: string;
-};
+}
+
+interface EmployeeObj {
+  name: string;
+  jobTitle: string;
+}
+
+interface DepartmentObj {
+  employeeNumber: number;
+  name: string;
+  location: string;
+}
 
 const httpTrigger: AzureFunction = async (
   context: Context,
   req: HttpRequest
 ) => {
+  const data = req.body;
+  let status = 200;
+  let body = '';
   try {
-    const data = req.body;
-    let status = 200;
-    let body = '';
-    const schema: SchemaOf<ReqbodySchema> = object({
+    const schema: SchemaOf<CreatebodySchema> = object({
       name: string().defined(),
       jobTitle: string().defined(),
       department: string().defined(),
@@ -36,7 +47,7 @@ const httpTrigger: AzureFunction = async (
 
     await schema.validate(data);
 
-    const employeePayload: UserInfo = {
+    const employeePayload: EmployeeObj = {
       name: data.name,
       jobTitle: data.jobTitle,
     };
@@ -45,7 +56,7 @@ const httpTrigger: AzureFunction = async (
       increment: true,
     });
 
-    const departmentPayload: UserInfo = {
+    const departmentPayload: DepartmentObj = {
       employeeNumber: employee.employeeNumber,
       name: data.department,
       location: data.location,
@@ -54,25 +65,20 @@ const httpTrigger: AzureFunction = async (
     insert(Department, departmentPayload);
     body = { ...employee.dataValues, location: data.location };
     status = 201;
-
-    context.res = {
-      status: status,
-      body: body,
-    };
   } catch (err: any) {
-    let status = 500;
-    let body = 'something went wrong';
-    console.log('error');
-    console.log(err.name);
     if (err.name === 'ValidationError') {
       status = 400;
       body = err.message;
+    } else {
+      status = 500;
+      body = 'something went wrong';
     }
-    context.res = {
-      status: status,
-      body: body,
-    };
   }
+
+  context.res = {
+    status: status,
+    body: body,
+  };
 };
 
 export default httpTrigger;

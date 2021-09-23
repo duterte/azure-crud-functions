@@ -6,21 +6,22 @@ const httpTrigger: AzureFunction = async (
   context: Context,
   req: HttpRequest
 ) => {
+  let status: number = 200;
+  let body: string | object = '';
   try {
-    const data = await Employee.findAll({
+    body = await Employee.findAll({
       include: Department,
     });
-    context.res = {
-      status: 200,
-      body: data,
-    };
+
+    // body = data;
   } catch (err) {
-    console.log(err);
-    context.res = {
-      status: 500,
-      body: 'something went wrong',
-    };
+    status = 500;
+    body = 'something went wrong';
   }
+  context.res = {
+    status: 200,
+    body: body,
+  };
 };
 
 export default httpTrigger;
